@@ -3,8 +3,10 @@ import "./App.css";
 
 function App() {
   let [selectedTrackId, setSelectedTrackId] = useState(null);
+  let [selectedTrack, setSelectedTrack] = useState(null);
   let [tracks, setTracks] = useState(null);
 
+  // сами трэки
   useEffect(() => {
     console.log("effect");
 
@@ -43,38 +45,69 @@ function App() {
       <button
         onClick={() => {
           setSelectedTrackId(null);
+          setSelectedTrack(null);
         }}
       >
         Reset selection
       </button>
       {""}
-      <ul>
-        {tracks.map(
-          (
-            track,
-            // :{ id: number; title: string; url: string }
-          ) => (
-            <li
-              key={track.id}
-              className={track.id === selectedTrackId ? "selectedTrack" : ""}
-            >
-              <div
-                className="trackTitle"
-                onClick={() => {
-                  setSelectedTrackId(track.id);
-                }}
+      <div className="flexContainer">
+        <ul>
+          {tracks.map(
+            (
+              track,
+              // :{ id: number; title: string; url: string }
+            ) => (
+              <li
+                key={track.id}
+                className={track.id === selectedTrackId ? "selectedTrack" : ""}
               >
-                {track.attributes.title}
-              </div>
-              <audio
-                className="audio"
-                controls={true}
-                src={track.attributes.attachments[0].url}
-              ></audio>
-            </li>
-          ),
-        )}
-      </ul>
+                <div
+                  className="trackTitle"
+                  onClick={() => {
+                    setSelectedTrackId(track.id);
+                    fetch(
+                      "https://musicfun.it-incubator.app/api/1.0/playlists/tracks/" +
+                        track.id,
+                      {
+                        headers: {
+                          "api-key": "599e0fa5-4b4a-412d-b9fd-e509a0a227c4",
+                        },
+                      },
+                    )
+                      .then((res) => res.json())
+                      .then((json) => {
+                        setSelectedTrack(json.data);
+                      });
+                  }}
+                >
+                  {track.attributes.title}
+                </div>
+                <audio
+                  className="audio"
+                  controls={true}
+                  src={track.attributes.attachments[0].url}
+                ></audio>
+              </li>
+            ),
+          )}
+        </ul>
+
+        {/* Детали конкретного выбранного трека */}
+
+        <div>
+          <h2>Details</h2>
+          {selectedTrack === null ? (
+            "Track is not selected"
+          ) : (
+            <div>
+              <h3>{selectedTrack.attributes.title}</h3>
+              <h4>Lyrics</h4>
+              <p>{selectedTrack.attributes.lyrics ?? "No lyrics"}</p>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }

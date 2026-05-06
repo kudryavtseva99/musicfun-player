@@ -39,6 +39,11 @@ li {
   margin-bottom: 22px;
 }
 
+.flexContainer {
+  display: flex;
+  gap: 30px;
+}
+
 .trackTitle {
   max-width: 300px;
   white-space: nowrap;
