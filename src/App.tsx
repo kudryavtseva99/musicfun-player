@@ -66,6 +66,7 @@ function App() {
                   className="trackTitle"
                   onClick={() => {
                     setSelectedTrackId(track.id);
+                    setSelectedTrack(null);
                     fetch(
                       "https://musicfun.it-incubator.app/api/1.0/playlists/tracks/" +
                         track.id,
@@ -97,8 +98,10 @@ function App() {
 
         <div>
           <h2>Details</h2>
-          {selectedTrack === null ? (
+          {selectedTrackId === null ? (
             "Track is not selected"
+          ) : selectedTrack === null ? (
+            "Loading..."
           ) : (
             <div>
               <h3>{selectedTrack.attributes.title}</h3>
