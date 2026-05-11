@@ -104,7 +104,7 @@ function App() {
             selectedTrack &&
             selectedTrackId !== selectedTrack.id &&
             "...Loading"}
-          {selectedTrack && (
+          {selectedTrack && selectedTrackId === selectedTrack.id && (
             <div>
               <h3>{selectedTrack.attributes.title}</h3>
               <h4>Lyrics</h4>
